@@ -20,33 +20,48 @@
   restitution Double
   friction Double
   damping Double
+  is-sleeping Bool
   body-type BodyType
 ])
 
 (defmodule Body
+  (doc new "creates a new Dynamic body. Mass must be greater than zero.")
   (defn new [mass restitution friction damping]
-    (let [d (Double.clamp 0.0 1.0 damping)
-          inv (if (> mass 0.0) (/ 1.0 mass) 0.0)
-          type (if (= mass 0.0) (BodyType.Static) (BodyType.Dynamic))]
-      (Body.init (Vector3.init 0.0 0.0 0.0) (Vector3.init 0.0 0.0 0.0) mass (if (= mass 0.0) 0.0 inv) restitution friction d type)))
+    (let [safe-mass (Double.max mass 0.0001)
+          d (Double.clamp 0.0 1.0 damping)]
+      (Body.init (Vector3.init 0.0 0.0 0.0) 
+                 (Vector3.init 0.0 0.0 0.0) 
+                 safe-mass 
+                 (/ 1.0 safe-mass) 
+                 restitution 
+                 friction 
+                 d 
+                 false
+                 (BodyType.Dynamic))))
 
+  (doc kinematic "creates a new Kinematic body. Not affected by forces.")
   (defn kinematic [restitution friction]
-    (Body.init (Vector3.init 0.0 0.0 0.0) (Vector3.init 0.0 0.0 0.0) 0.0 0.0 restitution friction 1.0 (BodyType.Kinematic)))
+    (Body.init (Vector3.init 0.0 0.0 0.0) (Vector3.init 0.0 0.0 0.0) 0.0 0.0 restitution friction 1.0 false (BodyType.Kinematic)))
 
+  (doc static "creates a new Static body. Immovable.")
   (defn static [restitution friction]
-    (Body.init (Vector3.init 0.0 0.0 0.0) (Vector3.init 0.0 0.0 0.0) 0.0 0.0 restitution friction 1.0 (BodyType.Static)))
+    (Body.init (Vector3.init 0.0 0.0 0.0) (Vector3.init 0.0 0.0 0.0) 0.0 0.0 restitution friction 1.0 false (BodyType.Static)))
 
   (doc apply-force! "adds a continuous force to the body (Dynamic only).")
   (defn apply-force! [b f]
     (match-ref (Body.body-type b)
-      (BodyType.Dynamic) (Body.set-force! b (Vector3.add (Body.force b) f))
+      (BodyType.Dynamic) (do 
+                           (Body.set-force! b (Vector3.add (Body.force b) f))
+                           (Body.set-is-sleeping! b false))
       _ ()))
 
   (doc apply-impulse! "adds an instantaneous velocity change to the body.")
   (defn apply-impulse! [b impulse]
     (match-ref (Body.body-type b)
       (BodyType.Dynamic) (let [dv (Vector3.mul impulse @(Body.inv-mass b))]
-                           (Body.set-velocity! b (Vector3.add (Body.velocity b) &dv)))
+                           (do
+                             (Body.set-velocity! b (Vector3.add (Body.velocity b) &dv))
+                             (Body.set-is-sleeping! b false)))
       _ ()))
 )
 
@@ -64,20 +79,21 @@
         (Transform.set-position! t (Vector3.add (Transform.position t) &dp)))))
 
   (doc step-custom! "advances the simulation state by dt using a custom sub-step size.
-Only integrates bodies of type Dynamic.")
+Only integrates bodies of type Dynamic that are not sleeping.")
   (defn step-custom! [t b dt sub-step-size]
     (match-ref (Body.body-type b)
       (BodyType.Dynamic)
-        (let-do [accum (Double.min dt 0.1)
-                 ;; Optimization: Calculate acceleration once per frame
-                 accel (Vector3.mul (Body.force b) @(Body.inv-mass b))]
-          (do
-            (while (> accum 0.0)
-              (let [this-dt (Double.min accum sub-step-size)]
-                (do
-                  (integrate! t b &accel this-dt)
-                  (set! accum (- accum this-dt)))))
-            (Body.set-force! b (Vector3.init 0.0 0.0 0.0))))
+        (if @(Body.is-sleeping b)
+            ()
+            (let-do [accum (Double.min dt 0.1)
+                     accel (Vector3.mul (Body.force b) @(Body.inv-mass b))]
+              (do
+                (while (> accum 0.0)
+                  (let [this-dt (Double.min accum sub-step-size)]
+                    (do
+                      (integrate! t b &accel this-dt)
+                      (set! accum (- accum this-dt)))))
+                (Body.set-force! b (Vector3.init 0.0 0.0 0.0)))))
       _ ()))
 
   (doc step! "advances the simulation state by dt using a default 60Hz sub-step size.")

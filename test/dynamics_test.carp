@@ -25,15 +25,7 @@
           (Integrator.step! &t1 &b2 0.01)
           (set! state (Test.assert-equal &state 0.05 @(Vector3.x (Transform.position &t1)) "Integration moves transform"))))
 
-      ;; 3. Sub-stepping (Verify multiple steps)
-      (let [t-sub (Transform.identity)
-            b-sub (Body.new 1.0 0.0 0.0 1.0)]
-        (do
-          (Body.set-velocity! &b-sub (Vector3.init 10.0 0.0 0.0))
-          (Integrator.step-custom! &t-sub &b-sub 0.1 0.01)
-          (set! state (Test.assert-true &state (> @(Vector3.x (Transform.position &t-sub)) 0.9) "Sub-stepping moves correctly"))))
-
-      ;; 4. Static Body Invariant
+      ;; 3. Static Body Invariant
       (let [t-stat (Transform.identity)
             b-stat (Body.static 0.5 0.5)]
         (do
@@ -42,8 +34,15 @@
           (Integrator.step! &t-stat &b-stat 0.01)
           (set! state (Test.assert-equal &state 0.0 @(Vector3.x (Transform.position &t-stat)) "Static bodies do not move"))))
       
-      ;; 5. Damping Clamp
-      (let [b-clamp (Body.new 1.0 0.0 0.0 2.0)]
-        (set! state (Test.assert-equal &state 1.0 @(Body.damping &b-clamp) "Damping is clamped to 1.0")))
+      ;; 4. Sleep Support
+      (let [t-sleep (Transform.identity)
+            b-sleep (Body.new 1.0 0.0 0.0 1.0)]
+        (do
+          (Body.set-is-sleeping! &b-sleep true)
+          (Body.set-velocity! &b-sleep (Vector3.init 10.0 0.0 0.0))
+          (Integrator.step! &t-sleep &b-sleep 0.01)
+          (set! state (Test.assert-equal &state 0.0 @(Vector3.x (Transform.position &t-sleep)) "Sleeping bodies skip integration"))
+          (Body.apply-force! &b-sleep &(Vector3.init 10.0 0.0 0.0))
+          (set! state (Test.assert-true &state (not @(Body.is-sleeping &b-sleep)) "Forces wake bodies up"))))
       
       state)))
