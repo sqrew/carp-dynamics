@@ -41,23 +41,36 @@
 )
 
 (defmodule Integrator
-  (doc step! "advances the simulation state by dt.
-Uses Semi-Implicit Euler integration with exponential damping.
-Clamps dt to a max of 0.033s to prevent simulation explosion.")
-  (defn step! [t b dt]
+  (defn- integrate! [t b dt]
+    (let [;; 1. Apply Damping (Exponential Decay)
+          damped-v (Vector3.mul (Body.velocity b) (pow @(Body.damping b) dt))
+          ;; 2. Integrate Velocity (Add Acceleration)
+          accel (Vector3.mul (Body.force b) @(Body.inv-mass b))
+          dv (Vector3.mul &accel dt)
+          new-v (Vector3.add &damped-v &dv)
+          ;; 3. Integrate Position
+          dp (Vector3.mul &new-v dt)]
+      (do
+        (Body.set-velocity! b new-v)
+        (Transform.set-position! t (Vector3.add (Transform.position t) &dp)))))
+
+  (doc step-custom! "advances the simulation state by dt using a custom sub-step size.
+Splits large time gaps into multiple smaller steps for stability.
+Limits maximum accumulation to 0.1s to prevent the 'Spiral of Death'.")
+  (defn step-custom! [t b dt sub-step-size]
     (if @(Body.is-static b)
         ()
-        (let [safe-dt (Double.min dt 0.033)
-              ;; 1. Apply Damping (Exponential Decay)
-              damped-v (Vector3.mul (Body.velocity b) (pow @(Body.damping b) safe-dt))
-              ;; 2. Integrate Velocity (Add Acceleration)
-              accel (Vector3.mul (Body.force b) @(Body.inv-mass b))
-              dv (Vector3.mul &accel safe-dt)
-              new-v (Vector3.add &damped-v &dv)
-              ;; 3. Integrate Position
-              dp (Vector3.mul &new-v safe-dt)]
+        (let-do [accum (Double.min dt 0.1)]
           (do
-            (Body.set-velocity! b new-v)
-            (Transform.set-position! t (Vector3.add (Transform.position t) &dp))
+            (while (> accum 0.0)
+              (let [this-dt (Double.min accum sub-step-size)]
+                (do
+                  (integrate! t b this-dt)
+                  (set! accum (- accum this-dt)))))
+            ;; Clear Force Accumulator only after all sub-steps are complete
             (Body.set-force! b (Vector3.init 0.0 0.0 0.0))))))
+
+  (doc step! "advances the simulation state by dt using a default 60Hz sub-step size.")
+  (defn step! [t b dt]
+    (step-custom! t b dt 0.01666))
 )
