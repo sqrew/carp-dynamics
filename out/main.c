@@ -433,6 +433,9 @@ typedef bool(*Fn__double_double_bool)(double, double);
 typedef double(*Fn__double_double_double)(double, double);
 
 // Depth 4
+typedef double(*Fn__double_double_double_double)(double, double, double);
+
+// Depth 4
 typedef float(*Fn__double_float)(double);
 
 // Depth 4
@@ -527,18 +530,6 @@ typedef bool(*Fn__uint8_t_uint8_t_bool)(uint8_t, uint8_t);
 
 // Depth 4
 typedef uint8_t(*Fn__uint8_t_uint8_t_uint8_t)(uint8_t, uint8_t);
-
-// Depth 5
-typedef struct {
-    Vector3__double velocity;
-    Vector3__double force;
-    double mass;
-    double inv_MINUS_mass;
-    double restitution;
-    double friction;
-    double damping;
-    bool is_MINUS_static;
-} Body;
 
 // Depth 5
 typedef int(*Fn__Fn___void_int)(Lambda);
@@ -811,30 +802,6 @@ typedef Array__Char(*Fn__int_Fn___Char_MUL__Array__Char)(int, Lambda*);
 typedef Array__float(*Fn__int_float_MUL__Array__float)(int, float*);
 
 // Depth 8
-typedef String(*Fn__Body_MUL__String)(Body*);
-
-// Depth 8
-typedef Vector3__double*(*Fn__Body_MUL__Vector3__double_MUL_)(Body*);
-
-// Depth 8
-typedef void(*Fn__Body_MUL__Vector3__double_MUL__void)(Body*, Vector3__double*);
-
-// Depth 8
-typedef void(*Fn__Body_MUL__Vector3__double_void)(Body*, Vector3__double);
-
-// Depth 8
-typedef bool*(*Fn__Body_MUL__bool_MUL_)(Body*);
-
-// Depth 8
-typedef double*(*Fn__Body_MUL__double_MUL_)(Body*);
-
-// Depth 8
-typedef void(*Fn__Transform_MUL__Body_MUL__double_double_void)(Transform*, Body*, double, double);
-
-// Depth 8
-typedef void(*Fn__Transform_MUL__Body_MUL__double_void)(Transform*, Body*, double);
-
-// Depth 8
 typedef Quaternion*(*Fn__Transform_MUL__Quaternion_MUL_)(Transform*);
 
 // Depth 8
@@ -850,16 +817,7 @@ typedef void(*Fn__Transform_MUL__Vector3__double_void)(Transform*, Vector3__doub
 typedef Transform(*Fn__Vector3__double_Quaternion_Vector3__double_Transform)(Vector3__double, Quaternion, Vector3__double);
 
 // Depth 8
-typedef Body(*Fn__Vector3__double_Vector3__double_double_double_double_double_double_bool_Body)(Vector3__double, Vector3__double, double, double, double, double, double, bool);
-
-// Depth 8
-typedef Body(*Fn___Body)();
-
-// Depth 8
 typedef Transform(*Fn___Transform)();
-
-// Depth 8
-typedef Body(*Fn__double_double_double_double_Body)(double, double, double, double);
 
 // Depth 9
 typedef TransformMat4(*Fn__Array__float_TransformMat4)(Array__float);
@@ -899,6 +857,20 @@ typedef Array__int(*Fn__Fn__Array__uint8_t_MUL__int_MUL__Array__Array__uint8_t_M
 
 // Depth 10
 typedef Array__Array__uint8_t(*Fn__int_Array__Array__uint8_t)(int);
+
+// Depth 101
+typedef struct {
+    union {
+    // Dynamic
+    // Kinematic
+    // Static
+    char __dummy;
+    } u;
+    char _tag;
+} BodyType;
+#define BodyType_Dynamic_tag 0
+#define BodyType_Kinematic_tag 1
+#define BodyType_Static_tag 2
 
 // Depth 101
 typedef struct {
@@ -1120,6 +1092,18 @@ typedef struct {
     ByteOrder order;
 } Binary__Lambda_unsafe_MINUS_bytes_MINUS__GT_int64_MINUS_seq_19_env_ty;
 
+// Depth 103
+typedef struct {
+    Vector3__double velocity;
+    Vector3__double force;
+    double mass;
+    double inv_MINUS_mass;
+    double restitution;
+    double friction;
+    double damping;
+    BodyType body_MINUS_type;
+} Body;
+
 // Depth 104
 typedef Uint16(*Fn__Array__uint8_t_MUL__Uint16)(Array__uint8_t*);
 
@@ -1128,6 +1112,12 @@ typedef Uint32(*Fn__Array__uint8_t_MUL__Uint32)(Array__uint8_t*);
 
 // Depth 104
 typedef Uint64(*Fn__Array__uint8_t_MUL__Uint64)(Array__uint8_t*);
+
+// Depth 104
+typedef BodyType(*Fn__BodyType_BodyType)(BodyType);
+
+// Depth 104
+typedef String(*Fn__BodyType_MUL__String)(BodyType*);
 
 // Depth 104
 typedef Uint16(*Fn__ByteOrder_Array__uint8_t_MUL__Uint16)(ByteOrder, Array__uint8_t*);
@@ -1325,6 +1315,9 @@ typedef String(*Fn__Uint8_String)(Uint8);
 typedef bool(*Fn__Uint8_Uint8_bool)(Uint8, Uint8);
 
 // Depth 104
+typedef BodyType(*Fn___BodyType)();
+
+// Depth 104
 typedef ByteOrder(*Fn___ByteOrder)();
 
 // Depth 104
@@ -1412,6 +1405,24 @@ typedef Result__Uint32_Array__uint8_t(*Fn__Array__uint8_t_Result__Uint32_Array__
 typedef Result__Uint64_Array__uint8_t(*Fn__Array__uint8_t_Result__Uint64_Array__uint8_t)(Array__uint8_t);
 
 // Depth 106
+typedef BodyType*(*Fn__Body_MUL__BodyType_MUL_)(Body*);
+
+// Depth 106
+typedef String(*Fn__Body_MUL__String)(Body*);
+
+// Depth 106
+typedef Vector3__double*(*Fn__Body_MUL__Vector3__double_MUL_)(Body*);
+
+// Depth 106
+typedef void(*Fn__Body_MUL__Vector3__double_MUL__void)(Body*, Vector3__double*);
+
+// Depth 106
+typedef void(*Fn__Body_MUL__Vector3__double_void)(Body*, Vector3__double);
+
+// Depth 106
+typedef double*(*Fn__Body_MUL__double_MUL_)(Body*);
+
+// Depth 106
 typedef Maybe__Uint16(*Fn__ByteOrder_Array__uint8_t_MUL__Maybe__Uint16)(ByteOrder, Array__uint8_t*);
 
 // Depth 106
@@ -1493,6 +1504,15 @@ typedef Result__FILE_MUL__String(*Fn__String_MUL__String_MUL__Result__FILE_MUL__
 typedef Result__FILE_MUL__String(*Fn__String_Result__FILE_MUL__String)(String);
 
 // Depth 106
+typedef void(*Fn__Transform_MUL__Body_MUL__Vector3__double_MUL__double_void)(Transform*, Body*, Vector3__double*, double);
+
+// Depth 106
+typedef void(*Fn__Transform_MUL__Body_MUL__double_double_void)(Transform*, Body*, double, double);
+
+// Depth 106
+typedef void(*Fn__Transform_MUL__Body_MUL__double_void)(Transform*, Body*, double);
+
+// Depth 106
 typedef Maybe__Uint16(*Fn__Uint16_Maybe__Uint16)(Uint16);
 
 // Depth 106
@@ -1511,6 +1531,9 @@ typedef Maybe__Uint64(*Fn__Uint64_Maybe__Uint64)(Uint64);
 typedef Result__Uint64_Array__uint8_t(*Fn__Uint64_Result__Uint64_Array__uint8_t)(Uint64);
 
 // Depth 106
+typedef Body(*Fn__Vector3__double_Vector3__double_double_double_double_double_double_BodyType_Body)(Vector3__double, Vector3__double, double, double, double, double, double, BodyType);
+
+// Depth 106
 typedef Maybe__Uint16(*Fn___Maybe__Uint16)();
 
 // Depth 106
@@ -1518,6 +1541,12 @@ typedef Maybe__Uint32(*Fn___Maybe__Uint32)();
 
 // Depth 106
 typedef Maybe__Uint64(*Fn___Maybe__Uint64)();
+
+// Depth 106
+typedef Body(*Fn__double_double_Body)(double, double);
+
+// Depth 106
+typedef Body(*Fn__double_double_double_double_Body)(double, double, double, double);
 
 // Depth 106
 typedef struct {
@@ -1866,6 +1895,9 @@ typedef void(*Fn__ColorId_void)(ColorId);
 typedef Array__float(*Fn__LambdaEnv_Array__float_Array__float)(LambdaEnv, Array__float);
 
 // Depth 505
+typedef BodyType(*Fn__LambdaEnv_BodyType_BodyType)(LambdaEnv, BodyType);
+
+// Depth 505
 typedef Quaternion(*Fn__LambdaEnv_Quaternion_Quaternion)(LambdaEnv, Quaternion);
 
 // Depth 505
@@ -1882,9 +1914,6 @@ typedef bool(*Fn__LambdaEnv_String_MUL__bool)(LambdaEnv, String*);
 
 // Depth 505
 typedef Vector3__double(*Fn__LambdaEnv_Vector3__double_Vector3__double)(LambdaEnv, Vector3__double);
-
-// Depth 505
-typedef bool(*Fn__LambdaEnv_bool_bool)(LambdaEnv, bool);
 
 // Depth 505
 typedef double(*Fn__LambdaEnv_double_double)(LambdaEnv, double);
@@ -2784,6 +2813,9 @@ void Body_apply_MINUS_force_BANG_(Body* b, Vector3__double* f);
 void Body_apply_MINUS_impulse_BANG_(Body* b, Vector3__double* impulse);
 
 // Depth 500
+BodyType* Body_body_MINUS_type(Body* p);
+
+// Depth 500
 Body Body_copy(Body* pRef);
 
 // Depth 500
@@ -2799,13 +2831,13 @@ Vector3__double* Body_force(Body* p);
 double* Body_friction(Body* p);
 
 // Depth 500
-Body Body_init(Vector3__double velocity, Vector3__double force, double mass, double inv_MINUS_mass, double restitution, double friction, double damping, bool is_MINUS_static);
+Body Body_init(Vector3__double velocity, Vector3__double force, double mass, double inv_MINUS_mass, double restitution, double friction, double damping, BodyType body_MINUS_type);
 
 // Depth 500
 double* Body_inv_MINUS_mass(Body* p);
 
 // Depth 500
-bool* Body_is_MINUS_static(Body* p);
+Body Body_kinematic(double restitution, double friction);
 
 // Depth 500
 double* Body_mass(Body* p);
@@ -2818,6 +2850,12 @@ String Body_prn(Body *p);
 
 // Depth 500
 double* Body_restitution(Body* p);
+
+// Depth 500
+Body Body_set_MINUS_body_MINUS_type(Body p, BodyType newValue);
+
+// Depth 500
+void Body_set_MINUS_body_MINUS_type_BANG_(Body* pRef, BodyType newValue);
 
 // Depth 500
 Body Body_set_MINUS_damping(Body p, double newValue);
@@ -2844,12 +2882,6 @@ Body Body_set_MINUS_inv_MINUS_mass(Body p, double newValue);
 void Body_set_MINUS_inv_MINUS_mass_BANG_(Body* pRef, double newValue);
 
 // Depth 500
-Body Body_set_MINUS_is_MINUS_static(Body p, bool newValue);
-
-// Depth 500
-void Body_set_MINUS_is_MINUS_static_BANG_(Body* pRef, bool newValue);
-
-// Depth 500
 Body Body_set_MINUS_mass(Body p, double newValue);
 
 // Depth 500
@@ -2868,10 +2900,13 @@ Body Body_set_MINUS_velocity(Body p, Vector3__double newValue);
 void Body_set_MINUS_velocity_BANG_(Body* pRef, Vector3__double newValue);
 
 // Depth 500
-Body Body__STATIC_();
+Body Body__STATIC_(double restitution, double friction);
 
 // Depth 500
 String Body_str(Body *p);
+
+// Depth 500
+Body Body_update_MINUS_body_MINUS_type(Body p, Lambda *updater);
 
 // Depth 500
 Body Body_update_MINUS_damping(Body p, Lambda *updater);
@@ -2886,9 +2921,6 @@ Body Body_update_MINUS_friction(Body p, Lambda *updater);
 Body Body_update_MINUS_inv_MINUS_mass(Body p, Lambda *updater);
 
 // Depth 500
-Body Body_update_MINUS_is_MINUS_static(Body p, Lambda *updater);
-
-// Depth 500
 Body Body_update_MINUS_mass(Body p, Lambda *updater);
 
 // Depth 500
@@ -2899,6 +2931,32 @@ Body Body_update_MINUS_velocity(Body p, Lambda *updater);
 
 // Depth 500
 Vector3__double* Body_velocity(Body* p);
+
+// Depth 1000
+
+// Depth 500
+BodyType BodyType_Dynamic();
+
+// Depth 500
+BodyType BodyType_Kinematic();
+
+// Depth 500
+BodyType BodyType_Static();
+
+// Depth 500
+BodyType BodyType_copy(BodyType* pRef);
+
+// Depth 500
+void BodyType_delete(BodyType p);
+
+// Depth 500
+int BodyType_get_MINUS_tag(BodyType *p);
+
+// Depth 500
+String BodyType_prn(BodyType *p);
+
+// Depth 500
+String BodyType_str(BodyType *p);
 
 // Depth 1000
 
@@ -3197,6 +3255,9 @@ double Double_add_MINUS_ref(double* x, double* y);
 
 // Depth 500
 double Double_blit(double x);
+
+// Depth 500
+double Double_clamp__double(double min, double max, double val);
 
 // Depth 500
 double Double_dec(double x);
@@ -3610,7 +3671,7 @@ String IntRef_str(int* x);
 // Depth 1000
 
 // Depth 500
-void Integrator_integrate_BANG_(Transform* t, Body* b, double dt);
+void Integrator_integrate_BANG_(Transform* t, Body* b, Vector3__double* accel, double dt);
 
 // Depth 500
 void Integrator_step_BANG_(Transform* t, Body* b, double dt);
@@ -8766,36 +8827,48 @@ void Binary__Lambda_unsafe_MINUS_bytes_MINUS__GT_int64_MINUS_seq_19_env_ty_delet
 }
 
 void Body_apply_MINUS_force_BANG_(Body* b, Vector3__double* f) {
-    bool* _9 = Body_is_MINUS_static(b);
-    bool _10 = Bool_copy(_9);
-    if (_10) {
-        /* () */
-    } else {
-        Vector3__double* _20 = Body_force(b);
-        Vector3__double _22 = Vector3_add__double(_20, f);
-        Body_set_MINUS_force_BANG_(b, _22);
+    BodyType* _8 = Body_body_MINUS_type(b);
+    if(_8->_tag == BodyType_Dynamic_tag) {
+        BodyType* _8_temp = _8;
+        // Case expr:
+        Vector3__double* _16 = Body_force(b);
+        Vector3__double _18 = Vector3_add__double(_16, f);
+        Body_set_MINUS_force_BANG_(b, _18);
     }
+    else if(true) {
+        BodyType* _8_temp = _8;
+        BodyType* wildcard_20 = _8_temp;
+        /* () */
+    }
+    else UNHANDLED("dynamics.carp", 41);
 }
 
 void Body_apply_MINUS_impulse_BANG_(Body* b, Vector3__double* impulse) {
-    bool* _9 = Body_is_MINUS_static(b);
-    bool _10 = Bool_copy(_9);
-    if (_10) {
-        /* () */
-    } else {
+    BodyType* _8 = Body_body_MINUS_type(b);
+    if(_8->_tag == BodyType_Dynamic_tag) {
+        BodyType* _8_temp = _8;
+        // Case expr:
         /* let */ {
-            double* _22 = Body_inv_MINUS_mass(b);
-            double _23 = Double_copy(_22);
-            Vector3__double _24 = Vector3_mul__double(impulse, _23);
-            Vector3__double dv = _24;
-            Vector3__double* _31 = Body_velocity(b);
-            Vector3__double* _34 = &dv; // ref
-            Vector3__double _35 = Vector3_add__double(_31, _34);
-            Body_set_MINUS_velocity_BANG_(b, _35);
+            double* _18 = Body_inv_MINUS_mass(b);
+            double _19 = Double_copy(_18);
+            Vector3__double _20 = Vector3_mul__double(impulse, _19);
+            Vector3__double dv = _20;
+            Vector3__double* _27 = Body_velocity(b);
+            Vector3__double* _30 = &dv; // ref
+            Vector3__double _31 = Vector3_add__double(_27, _30);
+            Body_set_MINUS_velocity_BANG_(b, _31);
             Vector3_delete__double(dv);
         }
     }
+    else if(true) {
+        BodyType* _8_temp = _8;
+        BodyType* wildcard_34 = _8_temp;
+        /* () */
+    }
+    else UNHANDLED("dynamics.carp", 47);
 }
+
+BodyType* Body_body_MINUS_type(Body* p) { return (&(p->body_MINUS_type)); }
 
 Body Body_copy(Body* pRef) {
     Body copy = *pRef;
@@ -8806,7 +8879,7 @@ Body Body_copy(Body* pRef) {
     /* Ignore non-managed member 'restitution' : Double */
     /* Ignore non-managed member 'friction' : Double */
     /* Ignore non-managed member 'damping' : Double */
-    /* Ignore non-managed member 'is_MINUS_static' : Bool */
+    copy.body_MINUS_type = BodyType_copy(&(pRef->body_MINUS_type));
     return copy;
 }
 
@@ -8820,14 +8893,14 @@ void Body_delete(Body p) {
     /* Ignore non-managed member 'restitution' : Double */
     /* Ignore non-managed member 'friction' : Double */
     /* Ignore non-managed member 'damping' : Double */
-    /* Ignore non-managed member 'is_MINUS_static' : Bool */
+    BodyType_delete(p.body_MINUS_type);
 }
 
 Vector3__double* Body_force(Body* p) { return (&(p->force)); }
 
 double* Body_friction(Body* p) { return (&(p->friction)); }
 
-Body Body_init(Vector3__double velocity, Vector3__double force, double mass, double inv_MINUS_mass, double restitution, double friction, double damping, bool is_MINUS_static) {
+Body Body_init(Vector3__double velocity, Vector3__double force, double mass, double inv_MINUS_mass, double restitution, double friction, double damping, BodyType body_MINUS_type) {
     Body instance;
     instance.velocity = velocity;
     instance.force = force;
@@ -8836,55 +8909,65 @@ Body Body_init(Vector3__double velocity, Vector3__double force, double mass, dou
     instance.restitution = restitution;
     instance.friction = friction;
     instance.damping = damping;
-    instance.is_MINUS_static = is_MINUS_static;
+    instance.body_MINUS_type = body_MINUS_type;
     return instance;
 }
 
 double* Body_inv_MINUS_mass(Body* p) { return (&(p->inv_MINUS_mass)); }
 
-bool* Body_is_MINUS_static(Body* p) { return (&(p->is_MINUS_static)); }
+Body Body_kinematic(double restitution, double friction) {
+    Vector3__double _10 = Vector3_init__double(0.0, 0.0, 0.0);
+    Vector3__double _15 = Vector3_init__double(0.0, 0.0, 0.0);
+    BodyType _22 = BodyType_Kinematic();
+    Body _23 = Body_init(_10, _15, 0.0, 0.0, restitution, friction, 1.0, _22);
+    return _23;
+}
 
 double* Body_mass(Body* p) { return (&(p->mass)); }
 
 Body Body_new(double mass, double restitution, double friction, double damping) {
-    Body _67;
+    Body _75;
     /* let */ {
-        double _23;
-        bool _13 = Double__GT_(mass, 0.0);
-        if (_13) {
-            double _18 = Double__DIV_(1.0, mass);
-            double _19 = _18;
-            _23 = _19;
+        double _13 = Double_clamp__double(0.0, 1.0, damping);
+        double d = _13;
+        double _29;
+        bool _19 = Double__GT_(mass, 0.0);
+        if (_19) {
+            double _24 = Double__DIV_(1.0, mass);
+            double _25 = _24;
+            _29 = _25;
         } else {
-            double _22 = 0.0;
-            _23 = _22;
+            double _28 = 0.0;
+            _29 = _28;
         }
-        double inv = _23;
-        bool _39;
-        bool _29 = Double__EQ_(mass, 0.0);
-        if (_29) {
-            bool _32 = true;
-            _39 = _32;
+        double inv = _29;
+        BodyType _44;
+        bool _35 = Double__EQ_(mass, 0.0);
+        if (_35) {
+            BodyType _38 = BodyType_Static();
+            BodyType _39 = _38;
+            _44 = _39;
         } else {
-            bool _37 = Double__EQ_(inv, 0.0);
-            bool _38 = _37;
-            _39 = _38;
+            BodyType _42 = BodyType_Dynamic();
+            BodyType _43 = _42;
+            _44 = _43;
         }
-        bool stat = _39;
-        Vector3__double _46 = Vector3_init__double(0.0, 0.0, 0.0);
+        BodyType type = _44;
         Vector3__double _51 = Vector3_init__double(0.0, 0.0, 0.0);
-        double _61;
-        if (stat) {
-            double _57 = 0.0;
-            _61 = _57;
+        Vector3__double _56 = Vector3_init__double(0.0, 0.0, 0.0);
+        double _69;
+        bool _62 = Double__EQ_(mass, 0.0);
+        if (_62) {
+            double _65 = 0.0;
+            _69 = _65;
         } else {
-            double _60 = inv;
-            _61 = _60;
+            double _68 = inv;
+            _69 = _68;
         }
-        Body _66 = Body_init(_46, _51, mass, _61, restitution, friction, damping, stat);
-        _67 = _66;
+        Body _74 = Body_init(_51, _56, mass, _69, restitution, friction, d, type);
+        _75 = _74;
     }
-    return _67;
+    return _75;
 }
 
 String Body_prn(Body *p) {
@@ -8921,7 +9004,7 @@ String Body_prn(Body *p) {
   size += snprintf(NULL, 0, "%s ", temp);
   if(temp) { CARP_FREE(temp); temp = NULL; }
 
-  temp = Bool_prn(p->is_MINUS_static); 
+  temp = BodyType_prn(&p->body_MINUS_type); 
   size += snprintf(NULL, 0, "%s ", temp);
   if(temp) { CARP_FREE(temp); temp = NULL; }
 
@@ -8967,7 +9050,7 @@ String Body_prn(Body *p) {
   bufferPtr += strlen(temp) + 1;
   if(temp) { CARP_FREE(temp); temp = NULL; }
 
-  temp = Bool_prn(p->is_MINUS_static);
+  temp = BodyType_prn(&p->body_MINUS_type);
   sprintf(bufferPtr, "%s ", temp);
   bufferPtr += strlen(temp) + 1;
   if(temp) { CARP_FREE(temp); temp = NULL; }
@@ -8978,6 +9061,19 @@ String Body_prn(Body *p) {
 }
 
 double* Body_restitution(Body* p) { return (&(p->restitution)); }
+
+Body Body_set_MINUS_body_MINUS_type(Body p, BodyType newValue) {
+    BodyType_delete(p.body_MINUS_type);
+    p.body_MINUS_type = newValue;
+    return p;
+}
+
+
+void Body_set_MINUS_body_MINUS_type_BANG_(Body* pRef, BodyType newValue) {
+    BodyType_delete(pRef->body_MINUS_type);
+    pRef->body_MINUS_type = newValue;
+}
+
 
 Body Body_set_MINUS_damping(Body p, double newValue) {
     /* Ignore non-managed member 'damping' : Double */
@@ -9031,19 +9127,6 @@ void Body_set_MINUS_inv_MINUS_mass_BANG_(Body* pRef, double newValue) {
 }
 
 
-Body Body_set_MINUS_is_MINUS_static(Body p, bool newValue) {
-    /* Ignore non-managed member 'is_MINUS_static' : Bool */
-    p.is_MINUS_static = newValue;
-    return p;
-}
-
-
-void Body_set_MINUS_is_MINUS_static_BANG_(Body* pRef, bool newValue) {
-    /* Ignore non-managed member 'is_MINUS_static' : Bool */
-    pRef->is_MINUS_static = newValue;
-}
-
-
 Body Body_set_MINUS_mass(Body p, double newValue) {
     /* Ignore non-managed member 'mass' : Double */
     p.mass = newValue;
@@ -9083,11 +9166,12 @@ void Body_set_MINUS_velocity_BANG_(Body* pRef, Vector3__double newValue) {
 }
 
 
-Body Body__STATIC_() {
-    Vector3__double _8 = Vector3_init__double(0.0, 0.0, 0.0);
-    Vector3__double _13 = Vector3_init__double(0.0, 0.0, 0.0);
-    Body _20 = Body_init(_8, _13, 0.0, 0.0, 0.0, 0.0, 1.0, true);
-    return _20;
+Body Body__STATIC_(double restitution, double friction) {
+    Vector3__double _10 = Vector3_init__double(0.0, 0.0, 0.0);
+    Vector3__double _15 = Vector3_init__double(0.0, 0.0, 0.0);
+    BodyType _22 = BodyType_Static();
+    Body _23 = Body_init(_10, _15, 0.0, 0.0, restitution, friction, 1.0, _22);
+    return _23;
 }
 
 String Body_str(Body *p) {
@@ -9124,7 +9208,7 @@ String Body_str(Body *p) {
   size += snprintf(NULL, 0, "%s ", temp);
   if(temp) { CARP_FREE(temp); temp = NULL; }
 
-  temp = Bool_prn(p->is_MINUS_static); 
+  temp = BodyType_prn(&p->body_MINUS_type); 
   size += snprintf(NULL, 0, "%s ", temp);
   if(temp) { CARP_FREE(temp); temp = NULL; }
 
@@ -9170,7 +9254,7 @@ String Body_str(Body *p) {
   bufferPtr += strlen(temp) + 1;
   if(temp) { CARP_FREE(temp); temp = NULL; }
 
-  temp = Bool_prn(p->is_MINUS_static);
+  temp = BodyType_prn(&p->body_MINUS_type);
   sprintf(bufferPtr, "%s ", temp);
   bufferPtr += strlen(temp) + 1;
   if(temp) { CARP_FREE(temp); temp = NULL; }
@@ -9179,6 +9263,12 @@ String Body_str(Body *p) {
   sprintf(bufferPtr, ")");
   return buffer;
 }
+
+Body Body_update_MINUS_body_MINUS_type(Body p, Lambda *updater) {
+    p.body_MINUS_type = (*updater).env ? ((Fn__LambdaEnv_BodyType_BodyType)(*updater).callback)((*updater).env, p.body_MINUS_type) : ((Fn__BodyType_BodyType)(*updater).callback)(p.body_MINUS_type);
+    return p;
+}
+
 
 Body Body_update_MINUS_damping(Body p, Lambda *updater) {
     p.damping = (*updater).env ? ((Fn__LambdaEnv_double_double)(*updater).callback)((*updater).env, p.damping) : ((Fn__double_double)(*updater).callback)(p.damping);
@@ -9204,12 +9294,6 @@ Body Body_update_MINUS_inv_MINUS_mass(Body p, Lambda *updater) {
 }
 
 
-Body Body_update_MINUS_is_MINUS_static(Body p, Lambda *updater) {
-    p.is_MINUS_static = (*updater).env ? ((Fn__LambdaEnv_bool_bool)(*updater).callback)((*updater).env, p.is_MINUS_static) : ((Fn__bool_bool)(*updater).callback)(p.is_MINUS_static);
-    return p;
-}
-
-
 Body Body_update_MINUS_mass(Body p, Lambda *updater) {
     p.mass = (*updater).env ? ((Fn__LambdaEnv_double_double)(*updater).callback)((*updater).env, p.mass) : ((Fn__double_double)(*updater).callback)(p.mass);
     return p;
@@ -9229,6 +9313,158 @@ Body Body_update_MINUS_velocity(Body p, Lambda *updater) {
 
 
 Vector3__double* Body_velocity(Body* p) { return (&(p->velocity)); }
+
+BodyType BodyType_Dynamic() {
+  BodyType instance;
+
+    instance._tag = BodyType_Dynamic_tag;
+    return instance;
+}
+
+BodyType BodyType_Kinematic() {
+  BodyType instance;
+
+    instance._tag = BodyType_Kinematic_tag;
+    return instance;
+}
+
+BodyType BodyType_Static() {
+  BodyType instance;
+
+    instance._tag = BodyType_Static_tag;
+    return instance;
+}
+
+BodyType BodyType_copy(BodyType* pRef) {
+    BodyType copy = *pRef;
+    if(pRef->_tag == BodyType_Dynamic_tag) {
+
+    }
+
+    else if(pRef->_tag == BodyType_Kinematic_tag) {
+
+    }
+
+    else if(pRef->_tag == BodyType_Static_tag) {
+
+    }
+
+    return copy;
+}
+
+void BodyType_delete(BodyType p) {
+  if(p._tag == BodyType_Dynamic_tag) {
+
+  }
+  else if(p._tag == BodyType_Kinematic_tag) {
+
+  }
+  else if(p._tag == BodyType_Static_tag) {
+
+  }
+
+}
+
+int BodyType_get_MINUS_tag(BodyType *p) { return p->_tag; }
+String BodyType_prn(BodyType *p) {
+  // convert members to String here:
+  String temp = NULL;
+  int tempsize = 0;
+  (void)tempsize; // that way we remove the occasional unused warning 
+  int size = 1;
+  if(p->_tag == BodyType_Dynamic_tag) {
+    size += snprintf(NULL, 0, "(%s ", "Dynamic");
+
+  }
+  if(p->_tag == BodyType_Kinematic_tag) {
+    size += snprintf(NULL, 0, "(%s ", "Kinematic");
+
+  }
+  if(p->_tag == BodyType_Static_tag) {
+    size += snprintf(NULL, 0, "(%s ", "Static");
+
+  }
+
+  String buffer = CARP_MALLOC(size);
+  String bufferPtr = buffer;
+
+  if(p->_tag == BodyType_Dynamic_tag) {
+    sprintf(bufferPtr, "(%s ", "Dynamic");
+    bufferPtr += strlen("Dynamic") + 2;
+
+
+    bufferPtr--;
+    sprintf(bufferPtr, ")");
+  }
+  if(p->_tag == BodyType_Kinematic_tag) {
+    sprintf(bufferPtr, "(%s ", "Kinematic");
+    bufferPtr += strlen("Kinematic") + 2;
+
+
+    bufferPtr--;
+    sprintf(bufferPtr, ")");
+  }
+  if(p->_tag == BodyType_Static_tag) {
+    sprintf(bufferPtr, "(%s ", "Static");
+    bufferPtr += strlen("Static") + 2;
+
+
+    bufferPtr--;
+    sprintf(bufferPtr, ")");
+  }
+
+  return buffer;
+}
+
+String BodyType_str(BodyType *p) {
+  // convert members to String here:
+  String temp = NULL;
+  int tempsize = 0;
+  (void)tempsize; // that way we remove the occasional unused warning 
+  int size = 1;
+  if(p->_tag == BodyType_Dynamic_tag) {
+    size += snprintf(NULL, 0, "(%s ", "Dynamic");
+
+  }
+  if(p->_tag == BodyType_Kinematic_tag) {
+    size += snprintf(NULL, 0, "(%s ", "Kinematic");
+
+  }
+  if(p->_tag == BodyType_Static_tag) {
+    size += snprintf(NULL, 0, "(%s ", "Static");
+
+  }
+
+  String buffer = CARP_MALLOC(size);
+  String bufferPtr = buffer;
+
+  if(p->_tag == BodyType_Dynamic_tag) {
+    sprintf(bufferPtr, "(%s ", "Dynamic");
+    bufferPtr += strlen("Dynamic") + 2;
+
+
+    bufferPtr--;
+    sprintf(bufferPtr, ")");
+  }
+  if(p->_tag == BodyType_Kinematic_tag) {
+    sprintf(bufferPtr, "(%s ", "Kinematic");
+    bufferPtr += strlen("Kinematic") + 2;
+
+
+    bufferPtr--;
+    sprintf(bufferPtr, ")");
+  }
+  if(p->_tag == BodyType_Static_tag) {
+    sprintf(bufferPtr, "(%s ", "Static");
+    bufferPtr += strlen("Static") + 2;
+
+
+    bufferPtr--;
+    sprintf(bufferPtr, ")");
+  }
+
+  return buffer;
+}
 
 bool Bool_blit(bool x) {
     bool _7 = x; // From the 'the' function.
@@ -10875,6 +11111,28 @@ double Double_blit(double x) {
     return _7;
 }
 
+double Double_clamp__double(double min, double max, double val) {
+    double _28;
+    bool _10 = Double__GT_(val, max);
+    if (_10) {
+        double _13 = max;
+        _28 = _13;
+    } else {
+        double _26;
+        bool _19 = Double__LT_(val, min);
+        if (_19) {
+            double _22 = min;
+            _26 = _22;
+        } else {
+            double _25 = val;
+            _26 = _25;
+        }
+        double _27 = _26;
+        _28 = _27;
+    }
+    return _28;
+}
+
 double Double_dec(double x) {
     double _7 = Double__MINUS_(x, 1.0);
     return _7;
@@ -12117,35 +12375,28 @@ String IntRef_str(int* x) {
     return _8;
 }
 
-void Integrator_integrate_BANG_(Transform* t, Body* b, double dt) {
+void Integrator_integrate_BANG_(Transform* t, Body* b, Vector3__double* accel, double dt) {
     /* let */ {
-        Vector3__double* _11 = Body_velocity(b);
-        double* _16 = Body_damping(b);
-        double _17 = Double_copy(_16);
-        double _19 = Double_pow(_17, dt);
-        Vector3__double _20 = Vector3_mul__double(_11, _19);
-        Vector3__double damped_MINUS_v = _20;
-        Vector3__double* _25 = Body_force(b);
-        double* _29 = Body_inv_MINUS_mass(b);
-        double _30 = Double_copy(_29);
-        Vector3__double _31 = Vector3_mul__double(_25, _30);
-        Vector3__double accel = _31;
-        Vector3__double* _36 = &accel; // ref
-        Vector3__double _38 = Vector3_mul__double(_36, dt);
-        Vector3__double dv = _38;
-        Vector3__double* _43 = &damped_MINUS_v; // ref
-        Vector3__double* _46 = &dv; // ref
-        Vector3__double _47 = Vector3_add__double(_43, _46);
-        Vector3__double new_MINUS_v = _47;
-        Vector3__double* _52 = &new_MINUS_v; // ref
-        Vector3__double _54 = Vector3_mul__double(_52, dt);
-        Vector3__double dp = _54;
+        Vector3__double* _12 = Body_velocity(b);
+        double* _17 = Body_damping(b);
+        double _18 = Double_copy(_17);
+        double _20 = Double_pow(_18, dt);
+        Vector3__double _21 = Vector3_mul__double(_12, _20);
+        Vector3__double damped_MINUS_v = _21;
+        Vector3__double _26 = Vector3_mul__double(accel, dt);
+        Vector3__double dv = _26;
+        Vector3__double* _31 = &damped_MINUS_v; // ref
+        Vector3__double* _34 = &dv; // ref
+        Vector3__double _35 = Vector3_add__double(_31, _34);
+        Vector3__double new_MINUS_v = _35;
+        Vector3__double* _40 = &new_MINUS_v; // ref
+        Vector3__double _42 = Vector3_mul__double(_40, dt);
+        Vector3__double dp = _42;
         Body_set_MINUS_velocity_BANG_(b, new_MINUS_v);
-        Vector3__double* _66 = Transform_position(t);
-        Vector3__double* _69 = &dp; // ref
-        Vector3__double _70 = Vector3_add__double(_66, _69);
-        Transform_set_MINUS_position_BANG_(t, _70);
-        Vector3_delete__double(accel);
+        Vector3__double* _54 = Transform_position(t);
+        Vector3__double* _57 = &dp; // ref
+        Vector3__double _58 = Vector3_add__double(_54, _57);
+        Transform_set_MINUS_position_BANG_(t, _58);
         Vector3_delete__double(damped_MINUS_v);
         Vector3_delete__double(dp);
         Vector3_delete__double(dv);
@@ -12157,31 +12408,43 @@ void Integrator_step_BANG_(Transform* t, Body* b, double dt) {
 }
 
 void Integrator_step_MINUS_custom_BANG_(Transform* t, Body* b, double dt, double sub_MINUS_step_MINUS_size) {
-    bool* _11 = Body_is_MINUS_static(b);
-    bool _12 = Bool_copy(_11);
-    if (_12) {
-        /* () */
-    } else {
+    BodyType* _10 = Body_body_MINUS_type(b);
+    if(_10->_tag == BodyType_Dynamic_tag) {
+        BodyType* _10_temp = _10;
+        // Case expr:
         /* let */ {
-            double _22 = min__double(dt, 0.1);
-            double accum = _22;
-            bool _30 = Double__GT_(accum, 0.0);
-            bool _53 = _30;
-            while (_53) {
+            double _18 = min__double(dt, 0.1);
+            double accum = _18;
+            Vector3__double* _23 = Body_force(b);
+            double* _27 = Body_inv_MINUS_mass(b);
+            double _28 = Double_copy(_27);
+            Vector3__double _29 = Vector3_mul__double(_23, _28);
+            Vector3__double accel = _29;
+            bool _37 = Double__GT_(accum, 0.0);
+            bool _63 = _37;
+            while (_63) {
                 /* let */ {
-                    double _36 = min__double(accum, sub_MINUS_step_MINUS_size);
-                    double this_MINUS_dt = _36;
-                    Integrator_integrate_BANG_(t, b, this_MINUS_dt);
-                    double _49 = Double__MINUS_(accum, this_MINUS_dt);
-                    accum = _49;  // Double = Double
+                    double _43 = min__double(accum, sub_MINUS_step_MINUS_size);
+                    double this_MINUS_dt = _43;
+                    Vector3__double* _51 = &accel; // ref
+                    Integrator_integrate_BANG_(t, b, _51, this_MINUS_dt);
+                    double _59 = Double__MINUS_(accum, this_MINUS_dt);
+                    accum = _59;  // Double = Double
                 }
-                bool _30 = Double__GT_(accum, 0.0);
-                _53 = _30;
+                bool _37 = Double__GT_(accum, 0.0);
+                _63 = _37;
             }
-            Vector3__double _60 = Vector3_init__double(0.0, 0.0, 0.0);
-            Body_set_MINUS_force_BANG_(b, _60);
+            Vector3__double _70 = Vector3_init__double(0.0, 0.0, 0.0);
+            Body_set_MINUS_force_BANG_(b, _70);
+            Vector3_delete__double(accel);
         }
     }
+    else if(true) {
+        BodyType* _10_temp = _10;
+        BodyType* wildcard_75 = _10_temp;
+        /* () */
+    }
+    else UNHANDLED("dynamics.carp", 69);
 }
 
 Long Long_blit(Long x) {
@@ -16791,17 +17054,17 @@ int id__int(int x) {
 
 int main(int argc, char** argv) {
     carp_init_globals(argc, argv);
-    int _337;
+    int _307;
     /* let */ {
         TestState _9 = Test_State_init(0, 0);
         TestState* _10 = &_9; // ref
         TestState* dynamics_MINUS_test = _10;
-        TestState _325;
+        TestState _295;
         /* let */ {
             TestState _21 = Test_State_init(0, 0);
             TestState state = _21;
             /* let */ {
-                Body _31 = Body_new(10.0, 0.5, 0.5, 1.0);
+                Body _31 = Body_new(10.0, 0.5, 0.5, 0.9);
                 Body b1 = _31;
                 TestState* _39 = &state; // ref
                 Body* _45 = &b1; // ref
@@ -16821,143 +17084,129 @@ int main(int argc, char** argv) {
                 TestState _66 = Test_assert_MINUS_equal__double_String(_56, 0.1, _64, _65_ref);
                 Test_State_delete(state);
                 state = _66;  // Test.State = Test.State
+                TestState* _73 = &state; // ref
+                Body* _79 = &b1; // ref
+                double* _80 = Body_damping(_79);
+                double _81 = Double_copy(_80);
+                static String _82 = "Damping set correctly";
+                String *_82_ref = &_82;
+                TestState _83 = Test_assert_MINUS_equal__double_String(_73, 0.9, _81, _82_ref);
+                Test_State_delete(state);
+                state = _83;  // Test.State = Test.State
                 Body_delete(b1);
             }
             /* let */ {
-                Transform _73 = Transform_identity();
-                Transform t1 = _73;
-                Body _80 = Body_new(1.0, 0.0, 0.0, 1.0);
-                Body b2 = _80;
-                Body* _86 = &b2; // ref
-                Vector3__double _91 = Vector3_init__double(5.0, 0.0, 0.0);
-                Body_set_MINUS_velocity_BANG_(_86, _91);
-                Transform* _96 = &t1; // ref
-                Body* _99 = &b2; // ref
-                Integrator_step_BANG_(_96, _99, 1.0e-2);
-                TestState* _107 = &state; // ref
-                Transform* _114 = &t1; // ref
-                Vector3__double* _115 = Transform_position(_114);
-                double* _116 = Vector3_x__double(_115);
-                double _117 = Double_copy(_116);
-                static String _118 = "Integration moves transform";
-                String *_118_ref = &_118;
-                TestState _119 = Test_assert_MINUS_equal__double_String(_107, 5.0e-2, _117, _118_ref);
+                Transform _90 = Transform_identity();
+                Transform t1 = _90;
+                Body _97 = Body_new(1.0, 0.0, 0.0, 1.0);
+                Body b2 = _97;
+                Body* _103 = &b2; // ref
+                Vector3__double _108 = Vector3_init__double(5.0, 0.0, 0.0);
+                Body_set_MINUS_velocity_BANG_(_103, _108);
+                Transform* _113 = &t1; // ref
+                Body* _116 = &b2; // ref
+                Integrator_step_BANG_(_113, _116, 1.0e-2);
+                TestState* _124 = &state; // ref
+                Transform* _131 = &t1; // ref
+                Vector3__double* _132 = Transform_position(_131);
+                double* _133 = Vector3_x__double(_132);
+                double _134 = Double_copy(_133);
+                static String _135 = "Integration moves transform";
+                String *_135_ref = &_135;
+                TestState _136 = Test_assert_MINUS_equal__double_String(_124, 5.0e-2, _134, _135_ref);
                 Test_State_delete(state);
-                state = _119;  // Test.State = Test.State
+                state = _136;  // Test.State = Test.State
                 Body_delete(b2);
                 Transform_delete(t1);
             }
             /* let */ {
-                Transform _126 = Transform_identity();
-                Transform t_MINUS_sub = _126;
-                Body _133 = Body_new(1.0, 0.0, 0.0, 1.0);
-                Body b_MINUS_sub = _133;
-                Body* _139 = &b_MINUS_sub; // ref
-                Vector3__double _144 = Vector3_init__double(10.0, 0.0, 0.0);
-                Body_set_MINUS_velocity_BANG_(_139, _144);
-                Transform* _149 = &t_MINUS_sub; // ref
-                Body* _152 = &b_MINUS_sub; // ref
-                Integrator_step_MINUS_custom_BANG_(_149, _152, 0.1, 1.0e-2);
-                TestState* _161 = &state; // ref
-                Transform* _168 = &t_MINUS_sub; // ref
-                Vector3__double* _169 = Transform_position(_168);
-                double* _170 = Vector3_x__double(_169);
-                double _171 = Double_copy(_170);
-                bool _173 = Double__GT_(_171, 0.9);
-                static String _174 = "Sub-stepping moves correctly";
-                String *_174_ref = &_174;
-                TestState _175 = Test_assert_MINUS_true__String(_161, _173, _174_ref);
+                Transform _143 = Transform_identity();
+                Transform t_MINUS_sub = _143;
+                Body _150 = Body_new(1.0, 0.0, 0.0, 1.0);
+                Body b_MINUS_sub = _150;
+                Body* _156 = &b_MINUS_sub; // ref
+                Vector3__double _161 = Vector3_init__double(10.0, 0.0, 0.0);
+                Body_set_MINUS_velocity_BANG_(_156, _161);
+                Transform* _166 = &t_MINUS_sub; // ref
+                Body* _169 = &b_MINUS_sub; // ref
+                Integrator_step_MINUS_custom_BANG_(_166, _169, 0.1, 1.0e-2);
+                TestState* _178 = &state; // ref
+                Transform* _185 = &t_MINUS_sub; // ref
+                Vector3__double* _186 = Transform_position(_185);
+                double* _187 = Vector3_x__double(_186);
+                double _188 = Double_copy(_187);
+                bool _190 = Double__GT_(_188, 0.9);
+                static String _191 = "Sub-stepping moves correctly";
+                String *_191_ref = &_191;
+                TestState _192 = Test_assert_MINUS_true__String(_178, _190, _191_ref);
                 Test_State_delete(state);
-                state = _175;  // Test.State = Test.State
+                state = _192;  // Test.State = Test.State
                 Body_delete(b_MINUS_sub);
                 Transform_delete(t_MINUS_sub);
             }
             /* let */ {
-                Transform _182 = Transform_identity();
-                Transform t2 = _182;
-                Body _189 = Body_new(2.0, 0.0, 0.0, 1.0);
-                Body b3 = _189;
-                Body* _195 = &b3; // ref
-                Vector3__double _201 = Vector3_init__double(10.0, 0.0, 0.0);
-                Vector3__double* _202 = &_201; // ref
-                Body_apply_MINUS_force_BANG_(_195, _202);
-                Transform* _207 = &t2; // ref
-                Body* _210 = &b3; // ref
-                Integrator_step_BANG_(_207, _210, 1.0e-2);
-                TestState* _218 = &state; // ref
-                Transform* _225 = &t2; // ref
-                Vector3__double* _226 = Transform_position(_225);
-                double* _227 = Vector3_x__double(_226);
-                double _228 = Double_copy(_227);
-                bool _230 = Double__GT_(_228, 0.0);
-                static String _231 = "Force affects movement";
-                String *_231_ref = &_231;
-                TestState _232 = Test_assert_MINUS_true__String(_218, _230, _231_ref);
+                Transform _199 = Transform_identity();
+                Transform t_MINUS_stat = _199;
+                Body _204 = Body__STATIC_(0.5, 0.5);
+                Body b_MINUS_stat = _204;
+                TestState* _212 = &state; // ref
+                Body* _218 = &b_MINUS_stat; // ref
+                double* _219 = Body_inv_MINUS_mass(_218);
+                double _220 = Double_copy(_219);
+                static String _221 = "Static body has 0 inv-mass";
+                String *_221_ref = &_221;
+                TestState _222 = Test_assert_MINUS_equal__double_String(_212, 0.0, _220, _221_ref);
                 Test_State_delete(state);
-                state = _232;  // Test.State = Test.State
-                TestState* _239 = &state; // ref
-                Body* _246 = &b3; // ref
-                Vector3__double* _247 = Body_force(_246);
-                double* _248 = Vector3_x__double(_247);
-                double _249 = Double_copy(_248);
-                static String _250 = "Force accumulator reset";
-                String *_250_ref = &_250;
-                TestState _251 = Test_assert_MINUS_equal__double_String(_239, 0.0, _249, _250_ref);
+                state = _222;  // Test.State = Test.State
+                Body* _227 = &b_MINUS_stat; // ref
+                Vector3__double _233 = Vector3_init__double(100.0, 0.0, 0.0);
+                Vector3__double* _234 = &_233; // ref
+                Body_apply_MINUS_force_BANG_(_227, _234);
+                Transform* _239 = &t_MINUS_stat; // ref
+                Body* _242 = &b_MINUS_stat; // ref
+                Integrator_step_BANG_(_239, _242, 1.0e-2);
+                TestState* _250 = &state; // ref
+                Transform* _257 = &t_MINUS_stat; // ref
+                Vector3__double* _258 = Transform_position(_257);
+                double* _259 = Vector3_x__double(_258);
+                double _260 = Double_copy(_259);
+                static String _261 = "Static bodies do not move";
+                String *_261_ref = &_261;
+                TestState _262 = Test_assert_MINUS_equal__double_String(_250, 0.0, _260, _261_ref);
                 Test_State_delete(state);
-                state = _251;  // Test.State = Test.State
-                Body_delete(b3);
-                Transform_delete(t2);
-                Vector3_delete__double(_201);
-            }
-            /* let */ {
-                Transform _258 = Transform_identity();
-                Transform t_MINUS_stat = _258;
-                Body _261 = Body__STATIC_();
-                Body b_MINUS_stat = _261;
-                TestState* _269 = &state; // ref
-                Body* _275 = &b_MINUS_stat; // ref
-                double* _276 = Body_inv_MINUS_mass(_275);
-                double _277 = Double_copy(_276);
-                static String _278 = "Static body has 0 inv-mass";
-                String *_278_ref = &_278;
-                TestState _279 = Test_assert_MINUS_equal__double_String(_269, 0.0, _277, _278_ref);
-                Test_State_delete(state);
-                state = _279;  // Test.State = Test.State
-                Body* _284 = &b_MINUS_stat; // ref
-                Vector3__double _290 = Vector3_init__double(100.0, 0.0, 0.0);
-                Vector3__double* _291 = &_290; // ref
-                Body_apply_MINUS_force_BANG_(_284, _291);
-                Transform* _296 = &t_MINUS_stat; // ref
-                Body* _299 = &b_MINUS_stat; // ref
-                Integrator_step_BANG_(_296, _299, 1.0e-2);
-                TestState* _307 = &state; // ref
-                Transform* _314 = &t_MINUS_stat; // ref
-                Vector3__double* _315 = Transform_position(_314);
-                double* _316 = Vector3_x__double(_315);
-                double _317 = Double_copy(_316);
-                static String _318 = "Static bodies do not move";
-                String *_318_ref = &_318;
-                TestState _319 = Test_assert_MINUS_equal__double_String(_307, 0.0, _317, _318_ref);
-                Test_State_delete(state);
-                state = _319;  // Test.State = Test.State
+                state = _262;  // Test.State = Test.State
                 Body_delete(b_MINUS_stat);
                 Transform_delete(t_MINUS_stat);
-                Vector3_delete__double(_290);
+                Vector3_delete__double(_233);
             }
-            TestState _324 = state;
-            _325 = _324;
+            /* let */ {
+                Body _273 = Body_new(1.0, 0.0, 0.0, 2.0);
+                Body b_MINUS_clamp = _273;
+                TestState* _280 = &state; // ref
+                Body* _286 = &b_MINUS_clamp; // ref
+                double* _287 = Body_damping(_286);
+                double _288 = Double_copy(_287);
+                static String _289 = "Damping is clamped to 1.0";
+                String *_289_ref = &_289;
+                TestState _290 = Test_assert_MINUS_equal__double_String(_280, 1.0, _288, _289_ref);
+                Test_State_delete(state);
+                state = _290;  // Test.State = Test.State
+                Body_delete(b_MINUS_clamp);
+            }
+            TestState _294 = state;
+            _295 = _294;
         }
-        TestState* _326 = &_325; // ref
-        dynamics_MINUS_test = _326;  // (Ref Test.State r211) = (Ref Test.State r211)
+        TestState* _296 = &_295; // ref
+        dynamics_MINUS_test = _296;  // (Ref Test.State r189) = (Ref Test.State r189)
         Test_print_MINUS_test_MINUS_results(dynamics_MINUS_test);
-        int* _334 = Test_State_failed(dynamics_MINUS_test);
-        int _335 = Int_copy(_334);
-        int _336 = _335;
-        _337 = _336;
-        Test_State_delete(_325);
+        int* _304 = Test_State_failed(dynamics_MINUS_test);
+        int _305 = Int_copy(_304);
+        int _306 = _305;
+        _307 = _306;
+        Test_State_delete(_295);
         Test_State_delete(_9);
     }
-    return _337;
+    return _307;
 }
 
 int max__int(int a, int b) {

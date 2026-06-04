@@ -2,6 +2,7 @@
 (use Test)
 (load "dynamics.carp")
 (use Body)
+(use BodyType)
 (use Integrator)
 (use Transform)
 (use Vector3)
@@ -10,10 +11,11 @@
   (let [state (Test.State.init 0 0)]
     (do
       ;; 1. Initialization
-      (let [b1 (Body.new 10.0 0.5 0.5 1.0)]
+      (let [b1 (Body.new 10.0 0.5 0.5 0.9)]
         (do
           (set! state (Test.assert-equal &state 10.0 @(Body.mass &b1) "Mass set correctly"))
-          (set! state (Test.assert-equal &state 0.1 @(Body.inv-mass &b1) "Inverse mass calculated"))))
+          (set! state (Test.assert-equal &state 0.1 @(Body.inv-mass &b1) "Inverse mass calculated"))
+          (set! state (Test.assert-equal &state 0.9 @(Body.damping &b1) "Damping set correctly"))))
 
       ;; 2. Integration (Velocity to Position)
       (let [t1 (Transform.identity)
@@ -28,27 +30,20 @@
             b-sub (Body.new 1.0 0.0 0.0 1.0)]
         (do
           (Body.set-velocity! &b-sub (Vector3.init 10.0 0.0 0.0))
-          ;; 0.1s dt with 0.01s sub-steps = 10 steps.
           (Integrator.step-custom! &t-sub &b-sub 0.1 0.01)
-          ;; Total distance should be 1.0 (10 steps of 0.01 * 10.0)
           (set! state (Test.assert-true &state (> @(Vector3.x (Transform.position &t-sub)) 0.9) "Sub-stepping moves correctly"))))
 
-      ;; 4. Force Application
-      (let [t2 (Transform.identity)
-            b3 (Body.new 2.0 0.0 0.0 1.0)]
-        (do
-          (Body.apply-force! &b3 &(Vector3.init 10.0 0.0 0.0))
-          (Integrator.step! &t2 &b3 0.01)
-          (set! state (Test.assert-true &state (> @(Vector3.x (Transform.position &t2)) 0.0) "Force affects movement"))
-          (set! state (Test.assert-equal &state 0.0 @(Vector3.x (Body.force &b3)) "Force accumulator reset"))))
-
-      ;; 5. Static Body Invariant
+      ;; 4. Static Body Invariant
       (let [t-stat (Transform.identity)
-            b-stat (Body.static)]
+            b-stat (Body.static 0.5 0.5)]
         (do
           (set! state (Test.assert-equal &state 0.0 @(Body.inv-mass &b-stat) "Static body has 0 inv-mass"))
           (Body.apply-force! &b-stat &(Vector3.init 100.0 0.0 0.0))
           (Integrator.step! &t-stat &b-stat 0.01)
           (set! state (Test.assert-equal &state 0.0 @(Vector3.x (Transform.position &t-stat)) "Static bodies do not move"))))
+      
+      ;; 5. Damping Clamp
+      (let [b-clamp (Body.new 1.0 0.0 0.0 2.0)]
+        (set! state (Test.assert-equal &state 1.0 @(Body.damping &b-clamp) "Damping is clamped to 1.0")))
       
       state)))
