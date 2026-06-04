@@ -13,15 +13,15 @@
   inv-mass Double
   restitution Double
   friction Double
-  damping Double
+  damping Double ;; Velocity retention per second (e.g., 0.9 = 90% velocity kept per second)
   is-static Bool
 ])
 
 (defmodule Body
   (defn new [mass restitution friction damping]
     (let [inv (if (> mass 0.0) (/ 1.0 mass) 0.0)
-          stat (= mass 0.0)]
-      (Body.init (Vector3.init 0.0 0.0 0.0) (Vector3.init 0.0 0.0 0.0) mass inv restitution friction damping stat)))
+          stat (or (= mass 0.0) (= inv 0.0))]
+      (Body.init (Vector3.init 0.0 0.0 0.0) (Vector3.init 0.0 0.0 0.0) mass (if stat 0.0 inv) restitution friction damping stat)))
 
   (defn static []
     (Body.init (Vector3.init 0.0 0.0 0.0) (Vector3.init 0.0 0.0 0.0) 0.0 0.0 0.0 0.0 1.0 true))
@@ -42,22 +42,22 @@
 
 (defmodule Integrator
   (doc step! "advances the simulation state by dt.
-Updates velocity based on force, and transform position based on velocity.
+Uses Semi-Implicit Euler integration with exponential damping.
 Clamps dt to a max of 0.033s to prevent simulation explosion.")
   (defn step! [t b dt]
     (if @(Body.is-static b)
         ()
         (let [safe-dt (Double.min dt 0.033)
+              ;; 1. Apply Damping (Exponential Decay)
+              damped-v (Vector3.mul (Body.velocity b) (pow @(Body.damping b) safe-dt))
+              ;; 2. Integrate Velocity (Add Acceleration)
               accel (Vector3.mul (Body.force b) @(Body.inv-mass b))
               dv (Vector3.mul &accel safe-dt)
-              ;; Apply force and damping
-              new-v (Vector3.mul &(Vector3.add (Body.velocity b) &dv) (pow @(Body.damping b) safe-dt))
+              new-v (Vector3.add &damped-v &dv)
+              ;; 3. Integrate Position
               dp (Vector3.mul &new-v safe-dt)]
           (do
-            ;; 1. Update Velocity
             (Body.set-velocity! b new-v)
-            ;; 2. Update Position
             (Transform.set-position! t (Vector3.add (Transform.position t) &dp))
-            ;; 3. Clear Force Accumulator
             (Body.set-force! b (Vector3.init 0.0 0.0 0.0))))))
 )
