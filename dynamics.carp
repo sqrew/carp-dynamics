@@ -1,0 +1,58 @@
+(load "../carp-transform/transform.carp")
+(load "Vector.carp")
+
+(use Vector3)
+(use Double)
+(use Transform)
+
+(doc Body "represents the Newtonian state of a physical object.")
+(deftype Body [
+  velocity (Vector3 Double)
+  force (Vector3 Double)
+  mass Double
+  inv-mass Double
+  restitution Double
+  friction Double
+  is-static Bool
+])
+
+(defmodule Body
+  (defn new [mass restitution friction]
+    (let [inv (if (> mass 0.0) (/ 1.0 mass) 0.0)]
+      (Body.init (Vector3.init 0.0 0.0 0.0) (Vector3.init 0.0 0.0 0.0) mass inv restitution friction false)))
+
+  (defn static []
+    (Body.init (Vector3.init 0.0 0.0 0.0) (Vector3.init 0.0 0.0 0.0) 0.0 0.0 0.0 0.0 true))
+
+  (doc apply-force! "adds a continuous force to the body (mass dependent).")
+  (defn apply-force! [b f]
+    (if @(Body.is-static b)
+        ()
+        (Body.set-force! b (Vector3.add (Body.force b) f))))
+
+  (doc apply-impulse! "adds an instantaneous velocity change to the body.")
+  (defn apply-impulse! [b impulse]
+    (if @(Body.is-static b)
+        ()
+        (let [dv (Vector3.mul impulse @(Body.inv-mass b))]
+          (Body.set-velocity! b (Vector3.add (Body.velocity b) &dv)))))
+)
+
+(defmodule Integrator
+  (doc step! "advances the simulation state by dt.
+Updates velocity based on force, and transform position based on velocity.")
+  (defn step! [t b dt]
+    (if @(Body.is-static b)
+        ()
+        (let [accel (Vector3.mul (Body.force b) @(Body.inv-mass b))
+              dv (Vector3.mul &accel dt)
+              new-v (Vector3.add (Body.velocity b) &dv)
+              dp (Vector3.mul &new-v dt)]
+          (do
+            ;; 1. Update Velocity
+            (Body.set-velocity! b new-v)
+            ;; 2. Update Position
+            (Transform.set-position! t (Vector3.add (Transform.position t) &dp))
+            ;; 3. Clear Force Accumulator
+            (Body.set-force! b (Vector3.init 0.0 0.0 0.0))))))
+)
