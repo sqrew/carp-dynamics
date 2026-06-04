@@ -13,16 +13,18 @@
   inv-mass Double
   restitution Double
   friction Double
+  damping Double
   is-static Bool
 ])
 
 (defmodule Body
-  (defn new [mass restitution friction]
-    (let [inv (if (> mass 0.0) (/ 1.0 mass) 0.0)]
-      (Body.init (Vector3.init 0.0 0.0 0.0) (Vector3.init 0.0 0.0 0.0) mass inv restitution friction false)))
+  (defn new [mass restitution friction damping]
+    (let [inv (if (> mass 0.0) (/ 1.0 mass) 0.0)
+          stat (= mass 0.0)]
+      (Body.init (Vector3.init 0.0 0.0 0.0) (Vector3.init 0.0 0.0 0.0) mass inv restitution friction damping stat)))
 
   (defn static []
-    (Body.init (Vector3.init 0.0 0.0 0.0) (Vector3.init 0.0 0.0 0.0) 0.0 0.0 0.0 0.0 true))
+    (Body.init (Vector3.init 0.0 0.0 0.0) (Vector3.init 0.0 0.0 0.0) 0.0 0.0 0.0 0.0 1.0 true))
 
   (doc apply-force! "adds a continuous force to the body (mass dependent).")
   (defn apply-force! [b f]
@@ -40,14 +42,17 @@
 
 (defmodule Integrator
   (doc step! "advances the simulation state by dt.
-Updates velocity based on force, and transform position based on velocity.")
+Updates velocity based on force, and transform position based on velocity.
+Clamps dt to a max of 0.033s to prevent simulation explosion.")
   (defn step! [t b dt]
     (if @(Body.is-static b)
         ()
-        (let [accel (Vector3.mul (Body.force b) @(Body.inv-mass b))
-              dv (Vector3.mul &accel dt)
-              new-v (Vector3.add (Body.velocity b) &dv)
-              dp (Vector3.mul &new-v dt)]
+        (let [safe-dt (Double.min dt 0.033)
+              accel (Vector3.mul (Body.force b) @(Body.inv-mass b))
+              dv (Vector3.mul &accel safe-dt)
+              ;; Apply force and damping
+              new-v (Vector3.mul &(Vector3.add (Body.velocity b) &dv) (pow @(Body.damping b) safe-dt))
+              dp (Vector3.mul &new-v safe-dt)]
           (do
             ;; 1. Update Velocity
             (Body.set-velocity! b new-v)
