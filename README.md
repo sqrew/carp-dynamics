@@ -16,22 +16,10 @@ This library provides the "nouns of motion"—managing forces, velocity, and int
 (load "https://github.com/sqrew/carp-dynamics@master")
 ```
 
-## Usage
-```clojure
-(use Body)
-(use Integrator)
-(use Vector3)
 
-;; 1. Create a dynamic body (Mass, Restitution, Friction, Damping)
-(let [b (Body.new 1.0 0.5 0.5 0.9)]
-  (do
-    ;; 2. Apply a force (e.g., gravity)
-    (Body.apply-force! &b &(Vector3.init 0.0 -9.81 0.0))
-    
-    ;; 3. Step the simulation
-    (Integrator.step! &my-transform &b dt)))
-```
+## Examples
 
+See [examples.md](examples.md) for usage examples.
 ## Design Philosophy
 `carp-dynamics` follows the **Separation of Mechanisms** principle. It handles *how* objects move through space based on forces, but it does not have opinions about *why* they collide. This makes it perfectly suitable for both traditional rigid-body physics and custom SDF-based resolution systems.
 
